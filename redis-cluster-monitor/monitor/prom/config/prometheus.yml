@@ -1,0 +1,126 @@
+# my global config
+global:
+  scrape_interval:     5s # Set the scrape interval to every 15 seconds. Default is every 1 minute. 拉取 targets 的默认时间间隔。
+  # scrape_timeout: 拉取一个 target 的超时时间。
+  evaluation_interval: 1s # Evaluate rules every 15 seconds. The default is every 1 minute. 执行 rules 的时间间隔。
+  # external_labels: 额外的属性，会添加到拉取的数据并存到数据库中。
+  # scrape_timeout is set to the global default (10s).
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "alert-rules.yml"
+  # - "second_rules.yml"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - 'alertmanager:9093'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name : 'redis-exporter'
+    file_sd_configs:
+      - files: [ /etc/prometheus/targets-redis-instances.json]
+    metrics_path: /scrape
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: redis-exporter:9121
+  #   # metrics_path defaults to '/metrics'
+  #   # scheme defaults to 'http'.
+  - job_name: 'redis_exporter'
+    static_configs:
+    - targets: ['redis-exporter:9121']
+
+  # - job_name: 'blackbox_for_haproxy'
+  #   # scrape_interval: 10s
+  #   metrics_path: /probe
+  #   params:
+  #     module: [http_2xx_haproxy]
+  #   static_configs:
+  #     - targets:
+  #       - http://ip:80
+  #       - https://ip:443
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - source_labels: [instance]
+  #       regex: (.*):(.*?)
+  #       target_label: port
+  #       replacement: ${2}
+  #     - target_label: __address__
+  #       replacement: blackbox-exporter:9115
+
+
+  # - job_name: 'blackbox_for_xxx_svc'
+  #   # scrape_interval: 10s
+  #   metrics_path: /probe
+  #   params:
+  #     module: [http_2xx_xxx_svc]
+  #   static_configs:
+  #     - targets:
+  #       - https://ip:443/health
+  #       - https://ip:443/api/session/health
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - source_labels: [instance]
+  #       regex: (.*):(.*?)/(.*)
+  #       target_label: port
+  #       replacement: ${2}
+  #     - source_labels: [instance]
+  #       regex: (.*):(.*?)/(.*)
+  #       target_label: instance_path
+  #       replacement: ${3}
+  #     - target_label: __address__
+  #       replacement: blackbox-exporter:9115
+
+
+  # - job_name: 'blackbox'
+  #   metrics_path: /probe
+  #   params:
+  #     module: [tcp_connect]
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - source_labels: [instance]
+  #       regex: (.*):(.*)
+  #       target_label: port
+  #       replacement: ${2}
+  #     - target_label: __address__
+  #       replacement: blackbox-exporter:9115
+
+  # - job_name: 'redis_exporter_targets'
+    # metrics_path: /scrape
+    # relabel_configs:
+    #   - source_labels: [__address__]
+    #     target_label: __param_target
+    #   - source_labels: [__param_target]
+    #     target_label: instance
+    #   - source_labels: [instance]
+    #     regex: (.*):(.*)
+    #     target_label: port
+    #     replacement: ${2}
+    #   - target_label: __address__
+    #     replacement: redis-exporter:9121
+    #   - source_labels: [__meta_gce_instance_name]
+    #     regex: (.*)
+    #     target_label: instance
+    #     replacement: ${1}
+
+
+

@@ -1,0 +1,5 @@
+groups:
+  - name: redis
+    rules:
+      - record: redis_keyspace_hitrate
+        expr: (redis_keyspace_hits_total / (redis_keyspace_hits_total + redis_keyspace_misses_total)) * 100

@@ -15,4 +15,4 @@ docker exec -it redis-1 sh
 
 redis-cli cluster info && redis-cli cluster nodes
 ```
-![](redis-cluster.png)
+![](./assets/redis-cluster.png)

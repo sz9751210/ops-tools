@@ -1,0 +1,134 @@
+groups:
+- name: alert.rules
+  rules:
+  # - alert: API服務中斷
+  #   expr: probe_success{job=~"blackbox_for_xxx_svc"} < 1
+  #   for: 1s
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: "服務 {{ $labels.instance_path }} 已終止運行"
+  #     description: " 服務 : {{ $labels.instance_path}} \n port : {{ $labels.port}} \n Job : {{ $labels.job }} \n status : 已停止運行超過五秒 "
+
+  # - alert: HAPROXY服務中斷
+  #   expr: probe_success{job=~"blackbox_for_haproxy"} < 1
+  #   for: 1s
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: "服務 {{ $labels.instance }} 已終止運行"
+  #     description: " 服務 : {{ $labels.instance}} \n port : {{ $labels.port}} \n Job : {{ $labels.job }} \n status : 已停止運行超過五秒 "
+
+
+
+  # - alert: redis_connected_clients
+  #   expr: redis_connected_clients < 5
+  #   for: 5s
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: "連線服務 {{ $labels.instance }} 使用率過低"
+  #     description: " 服務 : {{ $labels.instance}} \n IP : {{ $labels.port}} \n Job : {{ $labels.job }} \n status : 已極度少人使用超過五秒 "
+
+  #  - alert: redis_redis_keyspace_hitrate
+  #   expr: redis_redis_keyspace_hitrate
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+
+  #  - alert: redis_keyspace_hits_total
+  #   expr: rate(redis_keyspace_hits_total[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_keyspace_misses_total
+  #   expr: rate(redis_keyspace_misses_total[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_instantaneous_ops_per_sec
+  #   expr: rate(redis_instantaneous_ops_per_sec[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_instantaneous_input_kbps
+  #   expr: rate(redis_instantaneous_input_kbps[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+
+  #  - alert: redis_instantaneous_output_kbps
+  #   expr: rate(redis_instantaneous_output_kbps[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+
+  #  - alert: redis_keyspace_total_input_network
+  #   expr: rate(redis_keyspace_total_input_network[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_keyspace_total_output_network
+  #   expr: rate(redis_keyspace_total_output_network[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+
+  #  - alert: redis_connections
+  #   expr: rate(redis_connections[1m])
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_memory_used_rss_bytes
+  #   expr: redis_memory_used_rss_bytes
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 
+
+  #  - alert: redis_memory_used_peak_bytes
+  #   expr: redis_memory_used_peak_bytes
+  #   for: 1m
+  #   labels:
+  #     severity: "critical"
+  #   annotations:
+  #     summary: 
+  #     description: 

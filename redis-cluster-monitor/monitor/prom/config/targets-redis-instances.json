@@ -1,0 +1,6 @@
+[
+    {
+        "targets" : [ "redis://redis-1:6379", "redis://redis-2:6380", "redis://redis-3:6381" ],
+        "labels" : {}
+    }
+]

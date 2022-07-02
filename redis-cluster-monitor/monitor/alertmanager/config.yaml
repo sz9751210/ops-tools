@@ -1,0 +1,22 @@
+global:
+  resolve_timeout: 30s # 在沒有報警的情況下宣告為已解決的時間
+route:
+# 這裡的標籤列表是接收到報警資訊後的重新分組標籤，例如，接收到的報警資訊裡面有許多具有 alertname 這樣的標籤的報警資訊將會批量被聚合到一個分組裡面
+  group_by: ['alertname']
+  #  當一個新的報警分組被建立後，需要等待至少group_wait時間來初始化通知，這種方式可以確保您能有足夠的時間為同一分組來獲取多個警報，然後一起觸發這個報警資訊。
+  group_wait: 30s
+  group_interval: 30s  #重複發送告警的間隔時間
+  repeat_interval: 30s # 如果一個報警資訊已經發送成功了，等待'repeat_interval'時間來重新發送他們
+  receiver: 'web.hook'
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: "http://telegrambot:8080"
+        send_resolved: true
+#inhibit_rules:
+#  - source_match:
+#      severity: 'critical'
+#    target_match:
+#      severity: 'warning'
+#    equal: ['alertname', 'dev', 'instance','redis']
+

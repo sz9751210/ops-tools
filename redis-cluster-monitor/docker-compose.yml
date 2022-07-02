@@ -1,0 +1,84 @@
+version: '3.4'
+
+services:
+
+  # redis-cluster
+  redis-node1:
+    build:
+      context: ./redis/
+    ports:
+      - "6379:6379"
+    restart: always
+    container_name: redis-1
+    entrypoint: [redis-server, /etc/redis/redis-cluster.conf, --port,"6379"]
+
+  redis-node2:
+    build:
+      context: ./redis/
+    ports:
+      - "6380:6380"
+    restart: always
+    container_name: redis-2
+    entrypoint: [redis-server, /etc/redis/redis-cluster.conf,--port,"6380"]
+
+  redis-node3:
+    build:
+      context: ./redis/
+    ports:
+      - "6381:6381"
+    restart: always
+    container_name: redis-3
+    entrypoint: [redis-server, /etc/redis/redis-cluster.conf,--port,"6381"]
+
+  redis-cluster-creator:
+    image: redis:7.0
+    entrypoint: [/bin/sh,-c,'echo "yes" | redis-cli --cluster create redis-1:6379 redis-2:6380 redis-3:6381  --cluster-replicas 0']
+    depends_on:
+      - redis-node1
+      - redis-node2
+      - redis-node3
+
+  # monitor
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command: 
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitor/prom/config:/etc/prometheus:z
+      # - ./prom/data:/prometheus/data:z
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitor/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+
+  redis-exporter:
+    build:
+      context: ./monitor/redis_exporter
+    container_name: redis-exporter
+    # environment: 
+    #   REDIS_ADDR: redis://redis-1:6379/
+    ports:
+      - "9121:9121"
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitor/alertmanager/:/etc/alertmanager/
+    # links:
+    #   - telegrambot
+    command:
+      - "--config.file=/etc/alertmanager/config.yaml"
+      - "--storage.path=/alertmanager"
